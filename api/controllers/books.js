@@ -1,26 +1,13 @@
-// books.js
-
+// db.js
 const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
+const db = new sqlite3.Database("books.db");
 
-// Determinar la ruta de la base de datos, puede ser configurada a través de una variable de entorno
-const dbPath = process.env.DB_PATH || path.resolve(__dirname, "books.db");
-
-// Conectar a la base de datos SQLite
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error(`Error al conectar a la base de datos en ${dbPath}:`, err.message);
-  } else {
-    console.log(`Conectado a la base de datos en ${dbPath}`);
-  }
-});
-
-// Crear la tabla 'books' si no existe
+// Create books table if not exists
 db.run(
   "CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT, ape TEXT, nits TEXT, tel TEXT, dire TEXT, user TEXT, pass TEXT, role TEXT, state TEXT)"
 );
 
-// Operaciones CRUD
+// CRUD operations
 exports.createBook = (nom, ape, nits, tel, dire, user, pass, role, state, callback) => {
   db.run(
     "INSERT INTO books (nom, ape, nits, tel, dire, user, pass, role, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
